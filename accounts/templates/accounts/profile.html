@@ -1,44 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>پروفایل کاربری</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Vazirmatn", sans-serif, Tahoma, sans-serif;
+        color: #333;
+      }
+      .container {
+        max-width: 1100px;
+        margin-top: 50px;
+      }
+      /* دکمه برگشت */
+      .btn-back {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.3s ease;
+        margin-bottom: 30px;
+      }
+      .btn-back:hover {
+        background-color: #0847c1;
+        color: white;
+      }
 
-  <div class="profile-container">
-    <h2>پروفایل شما</h2>
-    <ul>
-      <li><strong>نام کاربری:</strong> {{ user.username }}</li>
-      <li><strong>ایمیل:</strong> {{ user.email }}</li>
-      <li><strong>نقش:</strong> {{ user.get_role_display }}</li>
-      <li><strong>جنسیت:</strong> {{ user.get_gender_display }}</li>
-      <li><strong>شماره تماس:</strong> {{ user.phone_number }}</li>
-      {% if user.profile_picture %}
-        <li><strong>عکس:</strong><br><img src="{{ user.profile_picture.url }}" alt="Profile" width="150"></li>
-      {% endif %}
-    </ul>
-  </div>
+      /* کارت پروفایل */
+      .profile-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
+        padding: 30px;
+      }
 
-  <div class="content-header">
-		<div class="d-flex align-items-center">
-			<div class="mr-auto">
-				<h3 class="page-title">Blank page</h3>
-				<div class="d-inline-block align-items-center">
-					<nav>
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
-							<li class="breadcrumb-item" aria-current="page">Sample Page</li>
-							<li class="breadcrumb-item active" aria-current="page">Blank page</li>
-						</ol>
-					</nav>
-				</div>
-			</div>
-			<div class="right-title">
-				<div class="dropdown">
-					<button class="btn btn-outline dropdown-toggle no-caret" type="button" data-toggle="dropdown"><i class="mdi mdi-dots-horizontal"></i></button>
-					<div class="dropdown-menu dropdown-menu-right">
-					  <a class="dropdown-item" href="#"><i class="mdi mdi-share"></i>Activity</a>
-					  <a class="dropdown-item" href="#"><i class="mdi mdi-email"></i>Messages</a>
-					  <a class="dropdown-item" href="#"><i class="mdi mdi-help-circle-outline"></i>FAQ</a>
-					  <a class="dropdown-item" href="#"><i class="mdi mdi-settings"></i>Support</a>
-					  <div class="dropdown-divider"></div>
-					  <button type="button" class="btn btn-success">Submit</button>
-					</div>
-				  </div>
-			</div>
-		</div>
-	</div>
+      /* عکس پروفایل */
+      .profile-img {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #0d6efd;
+        margin-bottom: 20px;
+      }
+
+      /* اطلاعات پروفایل */
+      .profile-info li {
+        font-size: 1.1rem;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        color: #444;
+      }
+      .profile-info li strong {
+        font-weight: 600;
+        color: #0d6efd;
+        min-width: 110px;
+        text-align: left;
+      }
+
+      /* دکمه ویرایش */
+      .btn-edit {
+        background-color: #198754;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+      }
+      .btn-edit:hover {
+        background-color: #145c32;
+        color: white;
+      }
+
+      /* بخش محتوا سمت راست */
+      .content-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
+        min-height: 380px;
+      }
+      .content-section h5 {
+        color: #0d6efd;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+      .content-section p {
+        line-height: 1.6;
+        font-size: 1.1rem;
+        color: #555;
+      }
+
+      /* ریسپانسیو */
+      @media (max-width: 767px) {
+        .profile-img {
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+        }
+        .profile-info li {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .profile-info li strong {
+          margin-bottom: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- دکمه برگشت -->
+      <button class="btn-back" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> بازگشت
+      </button>
+
+      <div class="row g-4">
+        <!-- ستون چپ: اطلاعات پروفایل -->
+        <div class="col-md-4">
+          <div class="profile-card text-center">
+            <!-- عکس پروفایل -->
+            <img
+              src="https://i.pravatar.cc/160?img=5"
+              alt="عکس پروفایل"
+              class="profile-img"
+            />
+            <!-- نام کاربر -->
+            <h4 class="mb-3">فاطمه رضایی</h4>
+            <!-- لیست اطلاعات -->
+            <ul
+              class="list-unstyled profile-info text-start mx-auto"
+              style="max-width: 320px"
+            >
+              <li>
+                <strong class="text-start">ایمیل:</strong> fatemeh@example.com
+              </li>
+              <li><strong class="text-start">نقش:</strong> توسعه‌دهنده وب</li>
+              <li><strong class="text-start">جنسیت:</strong> زن</li>
+              <li>
+                <strong class="text-start">شماره تماس:</strong> 09123456789
+              </li>
+            </ul>
+            <!-- دکمه ویرایش -->
+            <button class="btn-edit">ویرایش پروفایل</button>
+          </div>
+        </div>
+
+        <!-- ستون راست: محتوای بیشتر -->
+        <div class="col-md-8">
+          <div class="content-section">
+            <h5>درباره من</h5>
+            <p>
+              من یک توسعه‌دهنده وب با بیش از 5 سال تجربه در طراحی و توسعه
+              وب‌سایت‌های واکنش‌گرا و کاربرپسند هستم. علاقه‌مند به یادگیری
+              فناوری‌های جدید و بهبود تجربه کاربری.
+            </p>
+
+            <hr />
+
+            <h5>فعالیت‌های اخیر</h5>
+            <ul>
+              <li>آپدیت پروفایل کاربری - ۲ روز پیش</li>
+              <li>شرکت در دوره آموزش React - ۱ هفته پیش</li>
+              <li>اضافه کردن پروژه جدید به گیت‌هاب - ۳ هفته پیش</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- اسکریپت بوت‌استرپ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
